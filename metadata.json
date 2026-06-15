@@ -1,0 +1,6 @@
+{
+  "name": "Amor em Camadas BQ",
+  "description": "Aplicativo de delivery e vitrine de confeitaria premium.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
