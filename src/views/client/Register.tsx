@@ -42,7 +42,15 @@ export default function ClientRegister() {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        // Se for erro de rate limit, avisamos o usuário
+        if (error.status === 429 || error.message.toLowerCase().includes('rate limit') || error.message.toLowerCase().includes('too many requests')) {
+          showToast('Limite de cadastros do Supabase atingido. Alteração deve ser feita no painel do Supabase. Entrando em modo local temporário...');
+          navigate('catalog');
+          return;
+        }
+        throw error;
+      }
 
       showToast('Cadastro realizado com sucesso!');
       navigate('catalog');

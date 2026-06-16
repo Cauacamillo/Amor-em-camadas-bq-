@@ -29,7 +29,19 @@ export default function ClientLogin() {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.status === 429 || error.message.toLowerCase().includes('rate limit')) {
+          showToast('Limite de tentativas atingido. Entrando em modo local...');
+          navigate('catalog');
+          return;
+        }
+        if (error.message.includes('Invalid login credentials')) {
+          showToast('Credenciais inválidas. Verifique seu e-mail e senha.');
+        } else {
+          showToast(error.message);
+        }
+        return;
+      }
 
       showToast('Login realizado com sucesso!');
       navigate('catalog');
