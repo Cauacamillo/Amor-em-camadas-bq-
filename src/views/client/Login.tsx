@@ -1,9 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../../store';
 import { CakeSlice } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 
 export default function ClientLogin() {
-  const { navigate } = useAppContext();
+  const { navigate, showToast } = useAppContext();
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      showToast('Preencha e-mail e senha.');
+      return;
+    }
+
+    if (!supabase) {
+      showToast('Supabase não configurado. Entrando...');
+      navigate('catalog');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      showToast('Login realizado com sucesso!');
+      navigate('catalog');
+    } catch (error: any) {
+      console.error(error);
+      showToast(error.message || 'Erro ao realizar login.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-6 bg-primary-50">
@@ -22,9 +58,11 @@ export default function ClientLogin() {
         {/* Login Form */}
         <div className="w-full space-y-4 max-w-sm">
           <div>
-            <label className="block text-sm font-medium text-surface-900 mb-1">Usuário / E-mail</label>
+            <label className="block text-sm font-medium text-surface-900 mb-1">E-mail</label>
             <input 
-              type="text" 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-white border border-surface-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 transition-shadow"
               placeholder="seu@email.com"
             />
@@ -33,6 +71,8 @@ export default function ClientLogin() {
             <label className="block text-sm font-medium text-surface-900 mb-1">Senha</label>
             <input 
               type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-white border border-surface-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 transition-shadow"
               placeholder="••••••••"
             />
@@ -45,10 +85,11 @@ export default function ClientLogin() {
 
         <div className="w-full max-w-sm space-y-4">
           <button 
-            onClick={() => navigate('catalog')}
-            className="w-full bg-primary-600 text-white font-medium rounded-xl px-4 py-3.5 shadow-md shadow-primary-200 hover:bg-primary-700 active:scale-[0.98] transition-all"
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full bg-primary-600 text-white font-medium rounded-xl px-4 py-3.5 shadow-md shadow-primary-200 hover:bg-primary-700 active:scale-[0.98] transition-all disabled:opacity-70"
           >
-            Entrar
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
           
           <p className="text-center text-sm text-surface-900">
