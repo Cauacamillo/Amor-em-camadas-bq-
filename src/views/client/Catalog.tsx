@@ -78,8 +78,8 @@ export default function ClientCatalog() {
   );
 }
 
-function ProductCard({ product, addToCart }: { product: Product, addToCart: (p: Product, q: number) => void }) {
-  const [quantity, setQuantity] = useState(1);
+const ProductCard: React.FC<{ product: Product, addToCart: (p: Product, q: number) => void }> = ({ product, addToCart }) => {
+  const [quantity, setQuantity] = React.useState(1);
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-surface-200 overflow-hidden">
       <div className="h-40 bg-surface-100 w-full relative flex items-center justify-center text-surface-400">

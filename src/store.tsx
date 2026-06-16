@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ViewState, AppContextType, Product, CartItem, Order, Coupon, OrderStatus } from './types';
+import { supabase } from './lib/supabase';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -12,6 +13,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
+
+  // Carregar dados iniciais do Supabase
+  useEffect(() => {
+    if (!supabase) return;
+
+    const carregarDados = async () => {
+      try {
+        const [resProducts, resOrders, resCoupons] = await Promise.all([
+          supabase.from('products').select('*'),
+          supabase.from('orders').select('*').order('date', { ascending: false }),
+          supabase.from('coupons').select('*')
+        ]);
+
+        if (resProducts.data) setProducts(resProducts.data as Product[]);
+        if (resOrders.data) setOrders(resOrders.data as Order[]);
+        if (resCoupons.data) setCoupons(resCoupons.data as Coupon[]);
+      } catch (error) {
+        console.error('Erro ao carregar do supabase', error);
+      }
+    };
+    
+    carregarDados();
+  }, []);
 
   const navigate = (view: ViewState) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -26,13 +50,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Products
-  const addProduct = (p: Omit<Product, 'id'>) => {
-    setProducts((prev) => [...prev, { ...p, id: Math.random().toString(36).substr(2, 9) }]);
+  const addProduct = async (p: Omit<Product, 'id'>) => {
+    const newProduct = { ...p, id: crypto.randomUUID() };
+    setProducts((prev) => [...prev, newProduct]);
     showToast('Produto salvo com sucesso!');
+
+    if (supabase) {
+      await supabase.from('products').insert([newProduct]);
+    }
   };
-  const removeProduct = (id: string) => {
+  const removeProduct = async (id: string) => {
     setProducts((prev) => prev.filter(p => p.id !== id));
     showToast('Produto removido.');
+
+    if (supabase) {
+      await supabase.from('products').delete().eq('id', id);
+    }
   };
 
   // Cart
@@ -57,7 +90,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const cartTotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
 
   // Orders
-  const addOrder = (o: Omit<Order, 'id' | 'date' | 'status'>) => {
+  const addOrder = async (o: Omit<Order, 'id' | 'date' | 'status'>) => {
     const newOrder: Order = {
       ...o,
       id: Math.random().toString(36).substr(2, 6).toUpperCase(),
@@ -65,24 +98,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       status: 'received'
     };
     setOrders((prev) => [newOrder, ...prev]);
+
+    if (supabase) {
+      await supabase.from('orders').insert([newOrder]);
+    }
   };
-  const updateOrderStatus = (id: string, status: OrderStatus) => {
+  const updateOrderStatus = async (id: string, status: OrderStatus) => {
     setOrders((prev) => prev.map(o => o.id === id ? { ...o, status } : o));
     showToast('Status do pedido atualizado!');
+
+    if (supabase) {
+      await supabase.from('orders').update({ status }).eq('id', id);
+    }
   };
-  const removeOrder = (id: string) => {
+  const removeOrder = async (id: string) => {
     setOrders((prev) => prev.filter(o => o.id !== id));
     showToast('Pedido removido.');
+
+    if (supabase) {
+      await supabase.from('orders').delete().eq('id', id);
+    }
   };
 
   // Coupons
-  const addCoupon = (c: Omit<Coupon, 'id'>) => {
-    setCoupons((prev) => [...prev, { ...c, id: Math.random().toString(36).substr(2, 9) }]);
+  const addCoupon = async (c: Omit<Coupon, 'id'>) => {
+    const newCoupon = { ...c, id: crypto.randomUUID() };
+    setCoupons((prev) => [...prev, newCoupon]);
     showToast('Cupom salvo com sucesso!');
+
+    if (supabase) {
+      await supabase.from('coupons').insert([newCoupon]);
+    }
   };
-  const removeCoupon = (id: string) => {
+  const removeCoupon = async (id: string) => {
     setCoupons((prev) => prev.filter(c => c.id !== id));
     showToast('Cupom removido.');
+
+    if (supabase) {
+      await supabase.from('coupons').delete().eq('id', id);
+    }
   };
 
   return (
