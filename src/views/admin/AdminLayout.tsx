@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../../store';
-import { LayoutDashboard, CakeSlice, ClipboardList, Ticket, LineChart } from 'lucide-react';
+import { LayoutDashboard, Cake, ClipboardList, Ticket, LineChart } from 'lucide-react';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
 
   const tabs = [
     { id: 'admin-dashboard', icon: LayoutDashboard, label: 'Início' },
-    { id: 'admin-products', icon: CakeSlice, label: 'Produtos' },
+    { id: 'admin-products', icon: Cake, label: 'Produtos' },
     { id: 'admin-orders', icon: ClipboardList, label: 'Pedidos' },
     { id: 'admin-coupons', icon: Ticket, label: 'Cupons' },
     { id: 'admin-reports', icon: LineChart, label: 'Vendas' },

@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminLayout from './AdminLayout';
 import { useAppContext } from '../../store';
-import { Store, TrendingUp, ShoppingBag, DollarSign, Package, ClipboardList, CakeSlice, Ticket } from 'lucide-react';
+import { Store, TrendingUp, ShoppingBag, DollarSign, Package, ClipboardList, Cake, Ticket } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { isStoreOpen, toggleStoreOpen, navigate } = useAppContext();
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
             className="bg-white p-3 rounded-2xl shadow-sm border border-surface-200 flex flex-col items-center justify-center text-center gap-2 hover:bg-surface-50 transition-colors"
           >
              <div className="w-10 h-10 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center">
-               <CakeSlice className="w-5 h-5" />
+               <Cake className="w-5 h-5" />
              </div>
              <span className="text-[11px] font-semibold text-surface-700 uppercase tracking-wider">Produtos</span>
           </button>

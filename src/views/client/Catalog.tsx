@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../../store';
-import { ShoppingBag, Search, CakeSlice, Plus, Minus } from 'lucide-react';
+import { ShoppingBag, Search, Cake, Plus, Minus } from 'lucide-react';
 import { Product } from '../../types';
 import ClientBottomNav from '../../components/ClientBottomNav';
 
@@ -17,7 +17,7 @@ export default function ClientCatalog() {
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-              <CakeSlice className="w-4 h-4 text-primary-700" />
+              <Cake className="w-4 h-4 text-primary-700" />
             </div>
             <div>
               <h1 className="font-serif font-semibold text-primary-900 leading-none">Amor em Camadas</h1>
@@ -63,7 +63,7 @@ export default function ClientCatalog() {
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12">
             <div className="w-20 h-20 bg-primary-100/50 rounded-full flex items-center justify-center mb-6 text-primary-400">
-              <CakeSlice className="w-10 h-10" strokeWidth={1.5} />
+              <Cake className="w-10 h-10" strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-serif font-medium text-surface-900 mb-3">Vitrine sendo preparada</h3>
             <p className="text-sm text-surface-500 max-w-[260px] leading-relaxed">
@@ -83,7 +83,7 @@ const ProductCard: React.FC<{ product: Product, addToCart: (p: Product, q: numbe
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-surface-200 overflow-hidden">
       <div className="h-40 bg-surface-100 w-full relative flex items-center justify-center text-surface-400">
-        <CakeSlice className="w-12 h-12 opacity-50" />
+        <Cake className="w-12 h-12 opacity-50" />
       </div>
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">

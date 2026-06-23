@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../../store';
-import { CakeSlice } from 'lucide-react';
+import { Cake } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 export default function ClientLogin() {
@@ -13,6 +13,12 @@ export default function ClientLogin() {
   const handleLogin = async () => {
     if (!email || !password) {
       showToast('Preencha e-mail e senha.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast('Formato de e-mail inválido.');
       return;
     }
 
@@ -30,15 +36,16 @@ export default function ClientLogin() {
       });
 
       if (error) {
-        if (error.status === 429 || error.message.toLowerCase().includes('rate limit')) {
+        const errorMsg = (error.message || '').toLowerCase();
+        if (error.status === 429 || errorMsg.includes('rate limit')) {
           showToast('Limite de tentativas atingido. Entrando em modo local...');
           navigate('catalog');
           return;
         }
-        if (error.message.includes('Invalid login credentials')) {
+        if (errorMsg.includes('invalid login credentials')) {
           showToast('Credenciais inválidas. Verifique seu e-mail e senha.');
         } else {
-          showToast(error.message);
+          showToast(error.message || 'Erro no login');
         }
         return;
       }
@@ -59,7 +66,7 @@ export default function ClientLogin() {
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center">
           <div className="w-20 h-20 bg-primary-200 rounded-full flex items-center justify-center mb-4 shadow-sm">
-            <CakeSlice className="w-10 h-10 text-primary-700" strokeWidth={1.5} />
+            <Cake className="w-10 h-10 text-primary-700" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl font-serif text-primary-900 text-center leading-tight">
             Amor em<br />Camadas<br />

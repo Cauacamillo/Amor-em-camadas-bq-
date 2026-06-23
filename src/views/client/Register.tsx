@@ -22,6 +22,12 @@ export default function ClientRegister() {
       showToast('As senhas não coincidem.');
       return;
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast('Formato de e-mail inválido.');
+      return;
+    }
     
     if (!supabase) {
       showToast('Supabase não configurado. Simulação de cadastro.');
@@ -43,8 +49,9 @@ export default function ClientRegister() {
       });
 
       if (error) {
+        const errorMsg = (error.message || '').toLowerCase();
         // Se for erro de rate limit, avisamos o usuário
-        if (error.status === 429 || error.message.toLowerCase().includes('rate limit') || error.message.toLowerCase().includes('too many requests')) {
+        if (error.status === 429 || errorMsg.includes('rate limit') || errorMsg.includes('too many requests')) {
           showToast('Limite de cadastros do Supabase atingido. Alteração deve ser feita no painel do Supabase. Entrando em modo local temporário...');
           navigate('catalog');
           return;

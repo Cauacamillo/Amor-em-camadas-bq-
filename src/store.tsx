@@ -49,9 +49,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTimeout(() => setToastMessage(null), 3000);
   };
 
+  const generateId = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  };
+
   // Products
   const addProduct = async (p: Omit<Product, 'id'>) => {
-    const newProduct = { ...p, id: crypto.randomUUID() };
+    const newProduct = { ...p, id: generateId() };
     setProducts((prev) => [...prev, newProduct]);
     showToast('Produto salvo com sucesso!');
 
@@ -122,7 +129,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Coupons
   const addCoupon = async (c: Omit<Coupon, 'id'>) => {
-    const newCoupon = { ...c, id: crypto.randomUUID() };
+    const newCoupon = { ...c, id: generateId() };
     setCoupons((prev) => [...prev, newCoupon]);
     showToast('Cupom salvo com sucesso!');
 

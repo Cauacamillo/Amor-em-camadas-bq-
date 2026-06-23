@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
-import { Plus, Search, CakeSlice, Trash2 } from 'lucide-react';
+import { Plus, Search, Cake, Trash2 } from 'lucide-react';
 import { useAppContext } from '../../store';
 
 export default function AdminProducts() {
@@ -99,7 +99,7 @@ export default function AdminProducts() {
           {products.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
               <div className="w-16 h-16 border-2 border-dashed border-surface-300 rounded-full flex items-center justify-center mb-4 text-surface-400">
-                <CakeSlice className="w-8 h-8 opacity-50" />
+                <Cake className="w-8 h-8 opacity-50" />
               </div>
               <h3 className="font-medium text-surface-900 mb-1">Catálogo Vazio</h3>
               <p className="text-sm text-surface-500 mb-6 px-4">
@@ -117,7 +117,7 @@ export default function AdminProducts() {
               {products.map(p => (
                 <div key={p.id} className="bg-white p-3 rounded-2xl border border-surface-200 shadow-sm flex items-center gap-4">
                   <div className="w-16 h-16 bg-surface-100 rounded-xl flex items-center justify-center text-surface-400 shrink-0">
-                    <CakeSlice className="w-6 h-6" />
+                    <Cake className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-serif font-medium text-surface-900 line-clamp-1">{p.name}</h4>

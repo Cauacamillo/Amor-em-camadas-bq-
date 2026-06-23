@@ -20,23 +20,26 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full max-w-md mx-auto bg-white shadow-xl overflow-hidden relative font-sans text-surface-900 border-x border-surface-100 flex flex-col items-stretch">
-      {/* Client Views */}
-      {currentView === 'login' && <ClientLogin />}
-      {currentView === 'register' && <ClientRegister />}
-      {currentView === 'catalog' && <ClientCatalog />}
-      {currentView === 'cart' && <ClientCart />}
-      {currentView === 'checkout' && <ClientCheckout />}
-      {currentView === 'payment' && <ClientPayment />}
-      {currentView === 'order-tracking' && <ClientOrderTracking />}
-      {currentView === 'my-orders' && <ClientMyOrders />}
+      {/* Views Container */}
+      <div key={currentView} className="flex-1 flex flex-col h-full w-full animate-slide-up relative">
+        {/* Client Views */}
+        {currentView === 'login' && <ClientLogin />}
+        {currentView === 'register' && <ClientRegister />}
+        {currentView === 'catalog' && <ClientCatalog />}
+        {currentView === 'cart' && <ClientCart />}
+        {currentView === 'checkout' && <ClientCheckout />}
+        {currentView === 'payment' && <ClientPayment />}
+        {currentView === 'order-tracking' && <ClientOrderTracking />}
+        {currentView === 'my-orders' && <ClientMyOrders />}
 
-      {/* Admin Views */}
-      {currentView === 'admin-login' && <AdminLogin />}
-      {currentView === 'admin-dashboard' && <AdminDashboard />}
-      {currentView === 'admin-products' && <AdminProducts />}
-      {currentView === 'admin-orders' && <AdminOrders />}
-      {currentView === 'admin-coupons' && <AdminCoupons />}
-      {currentView === 'admin-reports' && <AdminReports />}
+        {/* Admin Views */}
+        {currentView === 'admin-login' && <AdminLogin />}
+        {currentView === 'admin-dashboard' && <AdminDashboard />}
+        {currentView === 'admin-products' && <AdminProducts />}
+        {currentView === 'admin-orders' && <AdminOrders />}
+        {currentView === 'admin-coupons' && <AdminCoupons />}
+        {currentView === 'admin-reports' && <AdminReports />}
+      </div>
       
       {/* Global Toast */}
       {toastMessage && (
